@@ -53,6 +53,24 @@ public class DroneController : MonoBehaviour
     {
         MoveDrone();
     }
+    [Header("Drone Properties")]
+    public float maxSpeed = 10f;
+    public float steeringForce = 5f;
+    public float detectionRadius = 5f;
+    
+    private Vector3 velocity;
+    private Vector3 acceleration;
+    
+    void Start()
+    {
+        velocity = Vector3.zero;
+        acceleration = Vector3.zero;
+    }
+
+    public void ApplyForce(Vector3 force)
+    {
+        acceleration += force;
+    }
 
   void MoveDrone()
 {
