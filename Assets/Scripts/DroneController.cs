@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class DroneController : MonoBehaviour
 {
@@ -37,4 +37,37 @@ public class DroneController : MonoBehaviour
     {
         acceleration += force;
     }
+}
+*/
+
+
+
+using UnityEngine;
+
+public class DroneController : MonoBehaviour
+{
+    public float speed = 5.0f;
+    public float rotationSpeed = 100.0f;
+
+    void Update()
+    {
+        MoveDrone();
+    }
+
+  void MoveDrone()
+{
+    // Get input from keyboard
+    float moveHorizontal = Input.GetAxis("Horizontal");
+    float moveVertical = Input.GetAxis("Vertical");
+
+    Debug.Log("Horizontal Input: " + moveHorizontal + ", Vertical Input: " + moveVertical);
+
+    // Move the drone forward/backward
+    Vector3 movement = transform.forward * moveVertical * speed * Time.deltaTime;
+    transform.position += movement;
+
+    // Rotate the drone left/right
+    float rotation = moveHorizontal * rotationSpeed * Time.deltaTime;
+    transform.Rotate(0, rotation, 0);
+}
 }
