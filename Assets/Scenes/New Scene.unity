@@ -598,6 +598,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+<<<<<<< HEAD:Assets/Scenes/Actual.unity
 --- !u!1 &876014270
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,13 +927,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> parent of 5dcf2cf (Added spawn Manager scene):Assets/Scenes/New Scene.unity
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 729121477}
   - {fileID: 699724023}
-  - {fileID: 1289834599}
   - {fileID: 725578764}
   - {fileID: 899687902}
   - {fileID: 273066547}

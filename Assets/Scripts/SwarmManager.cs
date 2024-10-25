@@ -23,7 +23,9 @@ public class SwarmManager : MonoBehaviour
             randomPosition.y = Mathf.Clamp(randomPosition.y, 0, spawnRadius); // Ensure drones spawn above ground
 
             GameObject droneObj = Instantiate(dronePrefab, randomPosition, Quaternion.identity);
+            // Pass the drone object to the DroneController
             DroneController drone = droneObj.GetComponent<DroneController>();
+            drone.Initialize(this); 
             drones.Add(drone);
         }
     }
@@ -37,12 +39,12 @@ public class SwarmManager : MonoBehaviour
     {
         foreach (var drone in drones)
         {
-            // Calculate swarm behaviors
+           /* // Calculate swarm behaviors
             Vector3 separation = CalculateSeparation(drone);
             Vector3 alignment = CalculateAlignment(drone);
             Vector3 cohesion = CalculateCohesion(drone);
 
-            /*// Apply behaviors
+            // Apply behaviors
             drone.ApplyForce(separation * 1.5f);
             drone.ApplyForce(alignment * 1.0f);
             drone.ApplyForce(cohesion * 1.0f);*/
@@ -135,3 +137,4 @@ public class SwarmManager : MonoBehaviour
         return Vector3.zero;
     }
 }
+

@@ -67,4 +67,26 @@ public class DroneController : MonoBehaviour
         float rotation = moveHorizontal * rotationSpeed * Time.deltaTime;
         transform.Rotate(0, rotation, 0);
     }
+
+    public float detectionRadius = 5f;
+    public float maxSpeed = 5f;
+    public float steeringForce = 5f;
+
+    private SwarmManager swarmManager;
+    private Rigidbody rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    public void Initialize(SwarmManager swarmManager)
+    {
+        this.swarmManager = swarmManager;
+    }
+
+    public void ApplyForce(Vector3 force)
+    {
+        rb.AddForce(force, ForceMode.Acceleration);
+    }
 }
