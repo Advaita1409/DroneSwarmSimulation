@@ -5,8 +5,8 @@ public class SwarmManager : MonoBehaviour
 {
     public GameObject dronePrefab;
     public int numberOfDrones = 10;
-    public Vector3 spawnVolume = new Vector3(10f, 5f, 10f);
-    
+    public float spawnRadius = 10f; // Added Spawn Radius
+
     private List<DroneController> drones = new List<DroneController>();
 
     void Start()
@@ -18,11 +18,9 @@ public class SwarmManager : MonoBehaviour
     {
         for (int i = 0; i < numberOfDrones; i++)
         {
-            Vector3 randomPosition = new Vector3(
-                Random.Range(-spawnVolume.x, spawnVolume.x),
-                Random.Range(-spawnVolume.y, spawnVolume.y),
-                Random.Range(-spawnVolume.z, spawnVolume.z)
-            );
+            // Generate a random position within a sphere defined by spawnRadius
+            Vector3 randomPosition = Random.insideUnitSphere * spawnRadius;
+            randomPosition.y = Mathf.Clamp(randomPosition.y, 0, spawnRadius); // Ensure drones spawn above ground
 
             GameObject droneObj = Instantiate(dronePrefab, randomPosition, Quaternion.identity);
             DroneController drone = droneObj.GetComponent<DroneController>();

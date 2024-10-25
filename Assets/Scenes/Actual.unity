@@ -570,8 +570,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dronePrefab: {fileID: 9171285125194850035, guid: dcfda235218df7146945f3c822edda39, type: 3}
-  numberOfDrones: 6
-  spawnVolume: {x: 10, y: 5, z: 10}
+  numberOfDrones: 10
+  spawnRadius: 10
 --- !u!4 &1289834599
 Transform:
   m_ObjectHideFlags: 0
