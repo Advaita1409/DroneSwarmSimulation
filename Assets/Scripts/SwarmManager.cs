@@ -6,12 +6,22 @@ public class SwarmManager : MonoBehaviour
     public GameObject dronePrefab;
     public int numberOfDrones = 10;
     public float spawnRadius = 10f; // Added Spawn Radius
+    public List<GameObject> drones = new List<GameObject>();
+    public Transform target; // The target or waypoint for drones to move towards
+    public float speed = 5f; // Speed of the drones
 
     private List<DroneController> drones = new List<DroneController>();
 
     void Start()
     {
         SpawnDrones();
+         // Instantiate drones
+        for (int i = 0; i < 5; i++) // Adjust the number of drones as needed
+        {
+            Vector3 position = new Vector3(i * 2, 0, 0); // Spread drones out
+            GameObject drone = Instantiate(dronePrefab, position, Quaternion.identity);
+            drones.Add(drone);
+        }
     }
 
     void SpawnDrones()
@@ -31,7 +41,23 @@ public class SwarmManager : MonoBehaviour
     void Update()
     {
         UpdateSwarmBehavior();
+        MoveDrones();
     }
+
+    void MoveDrones()
+    {
+        foreach (GameObject drone in drones)
+        {
+            if (target != null)
+            {
+                // Move drone towards the target
+                Vector3 direction = (target.position - drone.transform.position).normalized;
+                drone.transform.position += direction * speed * Time.deltaTime;
+            }
+        }
+    }
+
+
 
     void UpdateSwarmBehavior()
     {
