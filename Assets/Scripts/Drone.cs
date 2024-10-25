@@ -143,7 +143,7 @@ private Vector3 Seek(Vector3 target)
     Vector3 steer = desired - velocity;
     return steer;
 }
-   
+
    private Vector3 AvoidObstacles()
 {
     Vector3 avoidanceForce = Vector3.zero;
