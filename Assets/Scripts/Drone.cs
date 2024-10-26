@@ -45,131 +45,135 @@ public class Drone : MonoBehaviour
     }
 
     private Vector3 Separate()
-{
-    Vector3 steer = Vector3.zero;
-    int count = 0;
-    
-    Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, separationDistance);
-    
-    foreach (Collider other in nearbyDrones)
     {
-        if (other.gameObject != gameObject && other.CompareTag("Drone"))
+        Vector3 steer = Vector3.zero;
+        int count = 0;
+        
+        Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, separationDistance);
+        
+        foreach (Collider other in nearbyDrones)
         {
-            Vector3 diff = transform.position - other.transform.position;
-            float distance = diff.magnitude;
-            
-            // Weight by distance
-            diff.Normalize();
-            diff /= distance;
-            steer += diff;
-            count++;
-        }
-    }
-    
-    if (count > 0)
-    {
-        steer /= count;
-    }
-    
-    if (steer.magnitude > 0)
-    {
-        steer.Normalize();
-        steer *= maxSpeed;
-        steer -= velocity;
-    }
-    
-    return steer;
-}
-   private Vector3 Align()
-{
-    Vector3 sum = Vector3.zero;
-    int count = 0;
-    
-    Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, alignmentDistance);
-    
-    foreach (Collider other in nearbyDrones)
-    {
-        if (other.gameObject != gameObject && other.CompareTag("Drone"))
-        {
-            Drone drone = other.GetComponent<Drone>();
-            sum += drone.velocity;
-            count++;
-        }
-    }
-    
-    if (count > 0)
-    {
-        sum /= count;
-        sum.Normalize();
-        sum *= maxSpeed;
-        Vector3 steer = sum - velocity;
-        return steer;
-    }
-    
-    return Vector3.zero;
-}
-
-private Vector3 Cohere()
-{
-    Vector3 sum = Vector3.zero;
-    int count = 0;
-    
-    Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, cohesionDistance);
-    
-    foreach (Collider other in nearbyDrones)
-    {
-        if (other.gameObject != gameObject && other.CompareTag("Drone"))
-        {
-            sum += other.transform.position;
-            count++;
-        }
-    }
-    
-    if (count > 0)
-    {
-        sum /= count;
-        return Seek(sum);
-    }
-    
-    return Vector3.zero;
-}
-
-private Vector3 Seek(Vector3 target)
-{
-    Vector3 desired = target - transform.position;
-    desired.Normalize();
-    desired *= maxSpeed;
-    
-    Vector3 steer = desired - velocity;
-    return steer;
-}
-
-   private Vector3 AvoidObstacles()
-{
-    Vector3 avoidanceForce = Vector3.zero;
-    float rayLength = 10f;
-    
-    RaycastHit hit;
-    Vector3[] rayDirections = new Vector3[]
-    {
-        transform.forward,
-        Quaternion.Euler(0, 45, 0) * transform.forward,
-        Quaternion.Euler(0, -45, 0) * transform.forward,
-        Quaternion.Euler(45, 0, 0) * transform.forward,
-        Quaternion.Euler(-45, 0, 0) * transform.forward
-    };
-    
-    foreach (Vector3 direction in rayDirections)
-    {
-        if (Physics.Raycast(transform.position, direction, out hit, rayLength))
-        {
-            if (!hit.collider.CompareTag("Drone"))
+            if (other.gameObject != gameObject && other.CompareTag("Drone"))
             {
-                avoidanceForce += (transform.position - hit.point).normalized;
+                Vector3 diff = transform.position - other.transform.position;
+                float distance = diff.magnitude;
+                
+                // Weight by distance
+                diff.Normalize();
+                diff /= distance;
+                steer += diff;
+                count++;
             }
         }
+        
+        if (count > 0)
+        {
+            steer /= count;
+        }
+        
+        if (steer.magnitude > 0)
+        {
+            steer.Normalize();
+            steer *= maxSpeed;
+            steer -= velocity;
+        }
+        
+        return steer;
     }
-    
-    return avoidanceForce;
-}
+
+    private Vector3 Align()
+    {
+        Vector3 sum = Vector3.zero;
+        int count = 0;
+        
+        Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, alignmentDistance);
+        
+        foreach (Collider other in nearbyDrones)
+        {
+            if (other.gameObject != gameObject && other.CompareTag("Drone"))
+            {
+                Drone drone = other.GetComponent<Drone>();
+                if (drone != null)
+                {
+                    sum += drone.velocity;
+                    count++;
+                }
+            }
+        }
+        
+        if (count > 0)
+        {
+            sum /= count;
+            sum.Normalize();
+            sum *= maxSpeed;
+            Vector3 steer = sum - velocity;
+            return steer;
+        }
+        
+        return Vector3.zero;
+    }
+
+    private Vector3 Cohere()
+    {
+        Vector3 sum = Vector3.zero;
+        int count = 0;
+        
+        Collider[] nearbyDrones = Physics.OverlapSphere(transform.position, cohesionDistance);
+        
+        foreach (Collider other in nearbyDrones)
+        {
+            if (other.gameObject != gameObject && other.CompareTag("Drone"))
+            {
+                sum += other.transform.position;
+                count++;
+            }
+        }
+
+        if (count > 0)
+        {
+            sum /= count;
+            return Seek(sum);
+        }
+        
+        return Vector3.zero;
+    }
+
+    private Vector3 Seek(Vector3 target)
+    {
+        Vector3 desired = target - transform.position;
+        desired.Normalize();
+        desired *= maxSpeed;
+        
+        Vector3 steer = desired - velocity;
+        return steer;
+    }
+
+    private Vector3 AvoidObstacles()
+    {
+        Vector3 avoidanceForce = Vector3.zero;
+        float rayLength = 10f;
+        
+        RaycastHit hit;
+        Vector3[] rayDirections = new Vector3[]
+        {
+            transform.forward,
+            Quaternion.Euler(0, 45, 0) * transform.forward,
+            Quaternion.Euler(0, -45, 0) * transform.forward,
+            Quaternion.Euler(45, 0, 0) * transform.forward,
+            Quaternion.Euler(-45, 0, 0) * transform.forward
+        };
+        
+        foreach (Vector3 direction in rayDirections)
+        {
+            if (Physics.Raycast(transform.position, direction, out hit, rayLength))
+            {
+                if (!hit.collider.CompareTag("Drone"))
+                {
+                    avoidanceForce += (transform.position - hit.point).normalized;
+                }
+            }
+        }
+        
+        return avoidanceForce;
+    }
 }
